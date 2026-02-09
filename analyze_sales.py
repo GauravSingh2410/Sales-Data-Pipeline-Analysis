@@ -43,7 +43,7 @@ def analyze_sales_data(output_dir: str = "output") -> bool:
         df = pd.read_sql(query, conn)
         
         if df.empty:
-            logger.error("❌ No data found in database")
+            logger.error("No data found in database")
             return False
         
         logger.info(f"Loaded {len(df)} rows from database")
@@ -53,46 +53,46 @@ def analyze_sales_data(output_dir: str = "output") -> bool:
         
         # Check the Data
         logger.info("Data Summary:")
-        logger.info(f"   Shape: {df.shape}")
-        logger.info(f"   Date range: {df['date'].min()} to {df['date'].max()}")
-        logger.info(f"   Products: {df['product'].nunique()}")
-        logger.info(f"   Customers: {df['customer_name'].nunique()}")
+        logger.info(f"Shape: {df.shape}")
+        logger.info(f"Date range: {df['date'].min()} to {df['date'].max()}")
+        logger.info(f"Products: {df['product'].nunique()}")
+        logger.info(f"Customers: {df['customer_name'].nunique()}")
         
         # Calculate key metrics
         logger.info("\n" + "="*50)
-        logger.info("📊 SALES ANALYSIS RESULTS")
+        logger.info("SALES ANALYSIS RESULTS")
         logger.info("="*50)
         
         # Total Sales
         total_sales = df["total_price"].sum()
-        logger.info(f"💰 Total Sales: ${total_sales:,.2f}")
+        logger.info(f"Total Sales: ${total_sales:,.2f}")
         
         # Average order value
         avg_order_value = df["total_price"].mean()
-        logger.info(f"📈 Average Order Value: ${avg_order_value:,.2f}")
+        logger.info(f"Average Order Value: ${avg_order_value:,.2f}")
         
         # Total orders
         total_orders = len(df)
-        logger.info(f"🛒 Total Orders: {total_orders:,}")
+        logger.info(f"Total Orders: {total_orders:,}")
         
         # Top 5 Selling Products
         top_products = df.groupby("product")["total_price"].sum().sort_values(ascending=False).head(5)
-        logger.info("\n🏆 Top 5 Products by Sales:")
+        logger.info("\nTop 5 Products by Sales:")
         for product, sales in top_products.items():
-            logger.info(f"   {product}: ${sales:,.2f}")
+            logger.info(f"{product}: ${sales:,.2f}")
         
         # Top 5 Customers
         top_customers = df.groupby("customer_name")["total_price"].sum().sort_values(ascending=False).head(5)
-        logger.info("\n👥 Top 5 Customers by Total Spend:")
+        logger.info("\nTop 5 Customers by Total Spend:")
         for customer, spend in top_customers.items():
-            logger.info(f"   {customer}: ${spend:,.2f}")
+            logger.info(f"{customer}: ${spend:,.2f}")
         
         # Monthly sales trend
         df['month'] = df['date'].dt.to_period('M')
         monthly_sales = df.groupby('month')['total_price'].sum()
-        logger.info("\n📅 Monthly Sales Summary:")
+        logger.info("\nMonthly Sales Summary:")
         for month, sales in monthly_sales.items():
-            logger.info(f"   {month}: ${sales:,.2f}")
+            logger.info(f"{month}: ${sales:,.2f}")
         
         # Generate visualizations
         logger.info("\nGenerating visualizations...")
@@ -101,26 +101,26 @@ def analyze_sales_data(output_dir: str = "output") -> bool:
         daily_sales = df.groupby("date")["total_price"].sum()
         plt.figure(figsize=(12, 6))
         sns.lineplot(x=daily_sales.index, y=daily_sales.values, marker="o", color="b", linewidth=2)
-        plt.title("📊 Daily Sales Trend", fontsize=16, fontweight='bold')
+        plt.title("Daily Sales Trend", fontsize=17, fontweight='bold')
         plt.xlabel("Date", fontsize=12)
         plt.ylabel("Total Sales ($)", fontsize=12)
         plt.xticks(rotation=45)
         plt.grid(True, alpha=0.3)
         plt.tight_layout()
         plt.savefig(f"{output_dir}/daily_sales_trend.png", dpi=300, bbox_inches='tight')
-        logger.info(f"   ✅ Saved: {output_dir}/daily_sales_trend.png")
+        logger.info(f"Saved: {output_dir}/daily_sales_trend.png")
         plt.close()
         
         # 2. Top 5 Selling Products
         plt.figure(figsize=(10, 6))
         top_products_plot = top_products.sort_values(ascending=True)
         sns.barplot(x=top_products_plot.values, y=top_products_plot.index, palette="Blues_r")
-        plt.title("🏆 Top 5 Best-Selling Products", fontsize=16, fontweight='bold')
+        plt.title("Top 5 Best-Selling Products", fontsize=17, fontweight='bold')
         plt.xlabel("Total Sales ($)", fontsize=12)
         plt.ylabel("Product", fontsize=12)
         plt.tight_layout()
         plt.savefig(f"{output_dir}/top_products.png", dpi=300, bbox_inches='tight')
-        logger.info(f"   ✅ Saved: {output_dir}/top_products.png")
+        logger.info(f"Saved: {output_dir}/top_products.png")
         plt.close()
         
         # 3. Monthly Sales Trend
@@ -128,25 +128,25 @@ def analyze_sales_data(output_dir: str = "output") -> bool:
         monthly_sales_plot = monthly_sales.sort_index()
         sns.barplot(x=[str(m) for m in monthly_sales_plot.index], 
                    y=monthly_sales_plot.values, palette="viridis")
-        plt.title("📅 Monthly Sales Trend", fontsize=16, fontweight='bold')
+        plt.title("Monthly Sales Trend", fontsize=17, fontweight='bold')
         plt.xlabel("Month", fontsize=12)
         plt.ylabel("Total Sales ($)", fontsize=12)
         plt.xticks(rotation=45)
         plt.tight_layout()
         plt.savefig(f"{output_dir}/monthly_sales_trend.png", dpi=300, bbox_inches='tight')
-        logger.info(f"   ✅ Saved: {output_dir}/monthly_sales_trend.png")
+        logger.info(f"Saved: {output_dir}/monthly_sales_trend.png")
         plt.close()
         
         # 4. Product Quantity Distribution
         plt.figure(figsize=(10, 6))
         product_quantity = df.groupby("product")["quantity"].sum().sort_values(ascending=False)
         sns.barplot(x=product_quantity.values, y=product_quantity.index, palette="coolwarm")
-        plt.title("📦 Total Quantity Sold by Product", fontsize=16, fontweight='bold')
+        plt.title("Total Quantity Sold by Product", fontsize=16, fontweight='bold')
         plt.xlabel("Total Quantity", fontsize=12)
         plt.ylabel("Product", fontsize=12)
         plt.tight_layout()
         plt.savefig(f"{output_dir}/product_quantity.png", dpi=300, bbox_inches='tight')
-        logger.info(f"   ✅ Saved: {output_dir}/product_quantity.png")
+        logger.info(f"Saved: {output_dir}/product_quantity.png")
         plt.close()
         
         # Save summary statistics to CSV
@@ -159,16 +159,16 @@ def analyze_sales_data(output_dir: str = "output") -> bool:
         }
         summary_df = pd.DataFrame(summary_data)
         summary_df.to_csv(f"{output_dir}/sales_summary.csv", index=False)
-        logger.info(f"   ✅ Saved: {output_dir}/sales_summary.csv")
+        logger.info(f"Saved: {output_dir}/sales_summary.csv")
         
         logger.info("\n" + "="*50)
-        logger.info("✅ Analysis complete! All outputs saved to 'output' directory")
+        logger.info("Analysis complete! All outputs saved to 'output' directory")
         logger.info("="*50)
         
         return True
         
     except Exception as e:
-        logger.error(f"❌ Error analyzing sales data: {e}", exc_info=True)
+        logger.error(f"Error analyzing sales data: {e}", exc_info=True)
         return False
     finally:
         if conn:
