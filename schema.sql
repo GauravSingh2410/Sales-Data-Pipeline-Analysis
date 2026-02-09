@@ -6,7 +6,8 @@ CREATE DATABASE IF NOT EXISTS sales_db;
 USE sales_db;
 
 -- Create sales table
-CREATE TABLE IF NOT EXISTS sales (
+CREATE TABLE IF NOT EXISTS sales 
+(
     order_id VARCHAR(50) NOT NULL,
     date DATE NOT NULL,
     customer_name VARCHAR(255) NOT NULL,
