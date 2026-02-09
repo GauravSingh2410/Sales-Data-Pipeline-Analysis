@@ -78,26 +78,26 @@ def clean_sales_data(input_file: str = "sales_data.csv",
         if not is_valid:
             logger.warning(f"Data validation found issues: {errors}")
         else:
-            logger.info("✅ Data validation passed")
+            logger.info("Data validation passed")
         
         # Save the cleaned data
         logger.info(f"Saving cleaned data to {output_file}...")
         df.to_csv(output_file, index=False)
         
         final_count = len(df)
-        logger.info(f"✅ Data cleaning complete!")
-        logger.info(f"   Initial rows: {initial_count}")
-        logger.info(f"   Final rows: {final_count}")
-        logger.info(f"   Rows removed: {initial_count - final_count}")
-        logger.info(f"   Saved to '{output_file}'")
+        logger.info(f"Data cleaning complete!")
+        logger.info(f"Initial rows: {initial_count}")
+        logger.info(f"Final rows: {final_count}")
+        logger.info(f"Rows removed: {initial_count - final_count}")
+        logger.info(f"Saved to '{output_file}'")
         
         return True
         
     except FileNotFoundError:
-        logger.error(f"❌ Input file not found: {input_file}")
+        logger.error(f"Input file not found: {input_file}")
         return False
     except Exception as e:
-        logger.error(f"❌ Error cleaning sales data: {e}", exc_info=True)
+        logger.error(f"Error cleaning sales data: {e}", exc_info=True)
         return False
 
 if __name__ == "__main__":
